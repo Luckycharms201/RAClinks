@@ -122,17 +122,6 @@
     /* Header --------------------------------------------------------------*/
     header { text-align: center; }
 
-    .kicker {
-      font-family: "Unbounded", sans-serif;
-      font-weight: 700;
-      letter-spacing: .42em;
-      font-size: clamp(13px, 3.6vw, 16px);
-      color: var(--gold);
-      text-indent: .42em;
-      opacity: 0;
-      animation: rise .7s var(--ease) .05s forwards;
-    }
-
     .title {
       font-family: "Unbounded", sans-serif;
       font-weight: 900;
@@ -409,7 +398,7 @@
         animation-iteration-count: 1 !important;
         transition-duration: .001ms !important;
       }
-      .kicker, .title, .welcome, .rule, .card, footer { opacity: 1 !important; transform: none !important; }
+      .title, .welcome, .rule, .card, footer { opacity: 1 !important; transform: none !important; }
       .beams { display: none; }
       .card-inner { transform: none !important; }
     }
@@ -424,11 +413,10 @@
 
   <div class="wrap">
     <header>
-      <div class="kicker">EXATEC</div>
       <h1 class="title">
         <img class="logo" src="/logo-rac.png" alt="Regreso a Casa" width="886" height="240" />
       </h1>
-      <p class="welcome">Bienvenido a casa, EXATEC. Reviví la reunión y llevate un recuerdo del Campus Monterrey.</p>
+      <p class="welcome">Bienvenido a casa, EXATEC. Revive los grandes momentos de tu aniversario de graduación y llévate un recuerdo de Campus Monterrey.</p>
       <div class="rule" aria-hidden="true"></div>
     </header>
 
