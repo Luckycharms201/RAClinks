@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#001233" />
+  <meta name="description" content="Regreso a Casa — la reunión EXATEC del Tec de Monterrey, Campus Monterrey. Fotos, mapa, redes y beneficios para asistentes." />
+  <title>EXATEC · Regreso a Casa</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ---------------------------------------------------------------------
+       Tokens
+    --------------------------------------------------------------------- */
+    :root {
+      --blue-900: #001233;
+      --blue-800: #001a4d;
+      --blue-700: #002a73;
+      --blue:     #0039A6;
+      --blue-400: #3a7bff;
+      --blue-200: #9dbcff;
+      --gold:     #ffc23c;
+      --gold-soft:#ffd884;
+      --text:     #eaf1ff;
+      --muted:    #a7bce6;
+
+      --card-bg:    rgba(255, 255, 255, 0.05);
+      --card-bd:    rgba(157, 188, 255, 0.18);
+      --card-bd-hi: rgba(255, 194, 60, 0.65);
+
+      --ease: cubic-bezier(.22, .61, .36, 1);
+    }
+
+    /* ---------------------------------------------------------------------
+       Base
+    --------------------------------------------------------------------- */
+    * { box-sizing: border-box; }
+
+    html, body { height: 100%; }
+
+    body {
+      margin: 0;
+      min-height: 100svh;
+      font-family: "Space Grotesk", system-ui, -apple-system, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(140% 120% at 50% -10%, var(--blue-700) 0%, var(--blue-800) 38%, var(--blue-900) 78%);
+      background-attachment: fixed;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    /* Background layers ---------------------------------------------------*/
+    #bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .beams {
+      position: fixed;
+      inset: -20%;
+      z-index: 0;
+      pointer-events: none;
+      filter: blur(40px);
+      opacity: .55;
+      mix-blend-mode: screen;
+    }
+    .beams::before,
+    .beams::after {
+      content: "";
+      position: absolute;
+      top: -30%;
+      left: 50%;
+      width: 60vmax;
+      height: 140vmax;
+      transform-origin: top center;
+      background: linear-gradient(to bottom, var(--gold) 0%, transparent 60%);
+      opacity: .14;
+      will-change: transform;
+    }
+    .beams::before {
+      transform: translateX(-50%) rotate(-18deg);
+      animation: sweepA 18s ease-in-out infinite alternate;
+    }
+    .beams::after {
+      background: linear-gradient(to bottom, var(--blue-400) 0%, transparent 60%);
+      transform: translateX(-50%) rotate(16deg);
+      opacity: .18;
+      animation: sweepB 22s ease-in-out infinite alternate;
+    }
+    @keyframes sweepA {
+      from { transform: translateX(-70%) rotate(-24deg); }
+      to   { transform: translateX(-30%) rotate(-10deg); }
+    }
+    @keyframes sweepB {
+      from { transform: translateX(-30%) rotate(22deg); }
+      to   { transform: translateX(-70%) rotate(8deg); }
+    }
+
+    /* ---------------------------------------------------------------------
+       Layout
+    --------------------------------------------------------------------- */
+    .wrap {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 560px;
+      margin: 0 auto;
+      padding: clamp(28px, 7vw, 56px) clamp(20px, 6vw, 32px) 40px;
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header --------------------------------------------------------------*/
+    header { text-align: center; }
+
+    .kicker {
+      font-family: "Unbounded", sans-serif;
+      font-weight: 700;
+      letter-spacing: .42em;
+      font-size: clamp(13px, 3.6vw, 16px);
+      color: var(--gold);
+      text-indent: .42em;
+      opacity: 0;
+      animation: rise .7s var(--ease) .05s forwards;
+    }
+
+    .title {
+      font-family: "Unbounded", sans-serif;
+      font-weight: 900;
+      font-size: clamp(40px, 13vw, 68px);
+      line-height: .98;
+      margin: 10px 0 0;
+      letter-spacing: -.01em;
+      background: linear-gradient(180deg, #ffffff 0%, var(--blue-200) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 2px 40px rgba(58, 123, 255, .25);
+      opacity: 0;
+      animation: rise .8s var(--ease) .18s forwards;
+    }
+
+    .title .accent {
+      background: linear-gradient(180deg, var(--gold-soft), var(--gold));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .welcome {
+      margin: 16px auto 0;
+      max-width: 30ch;
+      font-size: clamp(15px, 4vw, 17px);
+      color: var(--muted);
+      opacity: 0;
+      animation: rise .8s var(--ease) .32s forwards;
+    }
+
+    .rule {
+      width: 56px;
+      height: 3px;
+      margin: 22px auto 0;
+      border-radius: 3px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity: 0;
+      animation: grow .9s var(--ease) .42s forwards;
+    }
+
+    /* Links ---------------------------------------------------------------*/
+    .links {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin: clamp(30px, 7vw, 44px) 0 0;
+    }
+
+    .card {
+      --prox: 0;
+      --rx: 0deg;
+      --ry: 0deg;
+      position: relative;
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      border-radius: 20px;
+      outline: none;
+      opacity: 0;
+      transform: translateY(26px);
+      animation: rise .7s var(--ease) forwards;
+      animation-delay: var(--d);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .card-inner {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 20px 18px;
+      min-height: 84px;
+      border-radius: 20px;
+      border: 1px solid var(--card-bd);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02)),
+        var(--card-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      overflow: hidden;
+      transform:
+        perspective(900px)
+        rotateX(var(--rx))
+        rotateY(var(--ry))
+        translateY(calc(var(--prox) * -7px))
+        scale(calc(1 + var(--prox) * .012));
+      box-shadow:
+        0 10px 30px rgba(0, 10, 40, .35),
+        inset 0 0 0 1px rgba(255,255,255,.02);
+      transition:
+        transform .22s var(--ease),
+        border-color .3s ease,
+        box-shadow .3s ease,
+        background .3s ease;
+      will-change: transform;
+    }
+
+    /* gold glow that grows with cursor proximity */
+    .card-inner::after {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      pointer-events: none;
+      box-shadow: 0 0 0 1px var(--card-bd-hi), 0 12px 40px rgba(255, 194, 60, .28);
+      opacity: var(--prox);
+      transition: opacity .3s ease;
+    }
+
+    .card:hover .card-inner,
+    .card:focus-visible .card-inner {
+      border-color: var(--card-bd-hi);
+      box-shadow:
+        0 18px 44px rgba(0, 10, 40, .45),
+        0 0 30px rgba(255, 194, 60, .22);
+    }
+
+    .card:focus-visible {
+      outline: 3px solid var(--gold);
+      outline-offset: 4px;
+    }
+
+    .card:active .card-inner { transform: scale(.985); }
+
+    .emoji {
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      font-size: 26px;
+      background: radial-gradient(120% 120% at 30% 20%, rgba(255,194,60,.22), rgba(58,123,255,.16));
+      border: 1px solid rgba(255,255,255,.12);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.18);
+    }
+
+    .card-text {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 0;
+    }
+    .card-text .t {
+      font-family: "Unbounded", sans-serif;
+      font-weight: 700;
+      font-size: clamp(16px, 4.4vw, 18px);
+      line-height: 1.15;
+      color: #fff;
+    }
+    .card-text .s {
+      font-size: clamp(13px, 3.6vw, 14px);
+      color: var(--muted);
+      line-height: 1.25;
+    }
+
+    .arrow {
+      flex: 0 0 auto;
+      margin-left: auto;
+      font-size: 22px;
+      color: var(--gold);
+      transform: translateX(0);
+      transition: transform .25s var(--ease);
+    }
+    .card:hover .arrow { transform: translateX(5px); }
+
+    /* tap ripple (touch only) */
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      width: 16px;
+      height: 16px;
+      transform: translate(-50%, -50%) scale(0);
+      background: radial-gradient(circle, rgba(255,194,60,.55), rgba(255,194,60,0) 70%);
+      pointer-events: none;
+      animation: ripple .6s ease-out forwards;
+    }
+
+    /* Footer --------------------------------------------------------------*/
+    footer {
+      margin-top: auto;
+      padding-top: 36px;
+      text-align: center;
+      font-size: 13px;
+      letter-spacing: .04em;
+      color: var(--muted);
+      opacity: 0;
+      animation: rise .8s var(--ease) .9s forwards;
+    }
+    footer .dot { color: var(--gold); }
+
+    /* ---------------------------------------------------------------------
+       Custom cursor (desktop / fine pointer only — toggled via JS)
+    --------------------------------------------------------------------- */
+    .cursor-dot,
+    .cursor-glow {
+      position: fixed;
+      top: 0;
+      left: 0;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0;
+      transition: opacity .3s ease;
+    }
+    .cursor-dot {
+      width: 8px;
+      height: 8px;
+      margin: -4px 0 0 -4px;
+      background: var(--gold);
+      box-shadow: 0 0 10px rgba(255,194,60,.9);
+    }
+    .cursor-glow {
+      width: 38px;
+      height: 38px;
+      margin: -19px 0 0 -19px;
+      background: radial-gradient(circle, rgba(58,123,255,.45), rgba(255,194,60,.18) 45%, transparent 70%);
+      filter: blur(2px);
+    }
+    body.has-cursor { cursor: none; }
+    body.has-cursor .cursor-dot,
+    body.has-cursor .cursor-glow { opacity: 1; }
+    body.has-cursor a { cursor: none; }
+
+    /* ---------------------------------------------------------------------
+       Keyframes
+    --------------------------------------------------------------------- */
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(26px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes grow {
+      from { opacity: 0; transform: scaleX(0); }
+      to   { opacity: 1; transform: scaleX(1); }
+    }
+    @keyframes ripple {
+      to { transform: translate(-50%, -50%) scale(16); opacity: 0; }
+    }
+
+    /* ---------------------------------------------------------------------
+       Reduced motion
+    --------------------------------------------------------------------- */
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .001ms !important;
+      }
+      .kicker, .title, .welcome, .rule, .card, footer { opacity: 1 !important; transform: none !important; }
+      .beams { display: none; }
+      .card-inner { transform: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="bg" aria-hidden="true"></canvas>
+  <div class="beams" aria-hidden="true"></div>
+
+  <div class="cursor-glow" aria-hidden="true"></div>
+  <div class="cursor-dot" aria-hidden="true"></div>
+
+  <div class="wrap">
+    <header>
+      <div class="kicker">EXATEC</div>
+      <h1 class="title">Regreso<br />a <span class="accent">Casa</span></h1>
+      <p class="welcome">Bienvenido a casa, EXATEC. Reviví la reunión y llevate un recuerdo del Campus Monterrey.</p>
+      <div class="rule" aria-hidden="true"></div>
+    </header>
+
+    <nav class="links" aria-label="Enlaces del evento">
+      <a class="card" style="--d:.5s" href="#" target="_blank" rel="noopener">
+        <span class="card-inner">
+          <span class="emoji" aria-hidden="true">📸</span>
+          <span class="card-text">
+            <span class="t">Fotos del evento</span>
+            <span class="s">Encuentra y descarga tus fotos</span>
+          </span>
+          <span class="arrow" aria-hidden="true">→</span>
+        </span>
+      </a>
+
+      <a class="card" style="--d:.62s" href="#" target="_blank" rel="noopener">
+        <span class="card-inner">
+          <span class="emoji" aria-hidden="true">🗺️</span>
+          <span class="card-text">
+            <span class="t">Mapa del campus</span>
+            <span class="s">Ubica los espacios del evento</span>
+          </span>
+          <span class="arrow" aria-hidden="true">→</span>
+        </span>
+      </a>
+
+      <a class="card" style="--d:.74s" href="https://instagram.com/exatec.mty" target="_blank" rel="noopener">
+        <span class="card-inner">
+          <span class="emoji" aria-hidden="true">📱</span>
+          <span class="card-text">
+            <span class="t">Síguenos</span>
+            <span class="s">Revive el evento en redes · @exatec.mty</span>
+          </span>
+          <span class="arrow" aria-hidden="true">→</span>
+        </span>
+      </a>
+
+      <a class="card" style="--d:.86s" href="#" target="_blank" rel="noopener">
+        <span class="card-inner">
+          <span class="emoji" aria-hidden="true">🏷️</span>
+          <span class="card-text">
+            <span class="t">Descuentos TecStore</span>
+            <span class="s">Beneficio exclusivo para asistentes</span>
+          </span>
+          <span class="arrow" aria-hidden="true">→</span>
+        </span>
+      </a>
+    </nav>
+
+    <footer>Tec de Monterrey <span class="dot">·</span> Campus Monterrey</footer>
+  </div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const fine = matchMedia("(hover: hover) and (pointer: fine)").matches;
+      const cards = Array.prototype.slice.call(document.querySelectorAll(".card"));
+
+      /* ----------------------------------------------------------------
+         Particle field (confetti-like soft drift)
+      ---------------------------------------------------------------- */
+      if (!reduced) {
+        const canvas = document.getElementById("bg");
+        const ctx = canvas.getContext("2d");
+        const COLORS = ["#ffc23c", "#7fb0ff", "#ffffff", "#3a7bff"];
+        let W, H, DPR, particles, raf;
+
+        function resize() {
+          DPR = Math.min(window.devicePixelRatio || 1, 2);
+          W = canvas.width = innerWidth * DPR;
+          H = canvas.height = innerHeight * DPR;
+          canvas.style.width = innerWidth + "px";
+          canvas.style.height = innerHeight + "px";
+        }
+
+        function spawn(fromBottom) {
+          return {
+            x: Math.random() * W,
+            y: fromBottom ? H + Math.random() * 40 * DPR : Math.random() * H,
+            r: (Math.random() * 2.4 + 1.1) * DPR,
+            vy: -(Math.random() * 0.45 + 0.15) * DPR,
+            sway: (Math.random() * 0.6 + 0.2) * DPR,
+            phase: Math.random() * Math.PI * 2,
+            color: COLORS[(Math.random() * COLORS.length) | 0],
+            alpha: Math.random() * 0.5 + 0.22
+          };
+        }
+
+        function seed() {
+          const count = Math.round(Math.min(80, (innerWidth * innerHeight) / 17000));
+          particles = [];
+          for (let i = 0; i < count; i++) particles.push(spawn(false));
+        }
+
+        function tick(t) {
+          ctx.clearRect(0, 0, W, H);
+          for (let i = 0; i < particles.length; i++) {
+            const p = particles[i];
+            p.y += p.vy;
+            p.x += Math.sin(t * 0.001 + p.phase) * p.sway * 0.4;
+            if (p.y < -12 * DPR) particles[i] = spawn(true);
+            ctx.globalAlpha = p.alpha;
+            ctx.fillStyle = p.color;
+            ctx.shadowColor = p.color;
+            ctx.shadowBlur = 12 * DPR;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.globalAlpha = 1;
+          ctx.shadowBlur = 0;
+          raf = requestAnimationFrame(tick);
+        }
+
+        let resizeT;
+        addEventListener("resize", function () {
+          clearTimeout(resizeT);
+          resizeT = setTimeout(function () { resize(); seed(); }, 150);
+        });
+
+        // Pause when tab is hidden to save battery.
+        document.addEventListener("visibilitychange", function () {
+          if (document.hidden) { cancelAnimationFrame(raf); }
+          else { raf = requestAnimationFrame(tick); }
+        });
+
+        resize();
+        seed();
+        raf = requestAnimationFrame(tick);
+      }
+
+      /* ----------------------------------------------------------------
+         Desktop: custom cursor + card proximity tilt
+      ---------------------------------------------------------------- */
+      if (fine && !reduced) {
+        document.body.classList.add("has-cursor");
+        const dot = document.querySelector(".cursor-dot");
+        const glow = document.querySelector(".cursor-glow");
+
+        let mx = innerWidth / 2, my = innerHeight / 2;
+        let gx = mx, gy = my;
+        let pending = false;
+
+        function applyProximity() {
+          for (let i = 0; i < cards.length; i++) {
+            const card = cards[i];
+            const r = card.getBoundingClientRect();
+            const cx = r.left + r.width / 2;
+            const cy = r.top + r.height / 2;
+            const dx = mx - cx, dy = my - cy;
+            const dist = Math.hypot(dx, dy);
+            const radius = Math.max(r.width, r.height) * 0.75 + 110;
+            const prox = Math.max(0, 1 - dist / radius);
+            card.style.setProperty("--prox", prox.toFixed(3));
+
+            const over = mx >= r.left && mx <= r.right && my >= r.top && my <= r.bottom;
+            if (over) {
+              card.style.setProperty("--rx", ((-(my - cy) / (r.height / 2)) * 6).toFixed(2) + "deg");
+              card.style.setProperty("--ry", (((mx - cx) / (r.width / 2)) * 6).toFixed(2) + "deg");
+            } else {
+              card.style.setProperty("--rx", "0deg");
+              card.style.setProperty("--ry", "0deg");
+            }
+          }
+          pending = false;
+        }
+
+        addEventListener("pointermove", function (e) {
+          if (e.pointerType === "touch") return;
+          mx = e.clientX; my = e.clientY;
+          dot.style.transform = "translate(" + mx + "px," + my + "px)";
+          if (!pending) { pending = true; requestAnimationFrame(applyProximity); }
+        }, { passive: true });
+
+        // Soft trailing glow eased toward the pointer.
+        (function trail() {
+          gx += (mx - gx) * 0.18;
+          gy += (my - gy) * 0.18;
+          glow.style.transform = "translate(" + gx + "px," + gy + "px)";
+          requestAnimationFrame(trail);
+        })();
+
+        // Hide native-feeling cursor dot when leaving the window.
+        addEventListener("pointerout", function (e) {
+          if (!e.relatedTarget) { dot.style.opacity = "0"; glow.style.opacity = "0"; }
+        });
+        addEventListener("pointerover", function () {
+          dot.style.opacity = ""; glow.style.opacity = "";
+        });
+      }
+
+      /* ----------------------------------------------------------------
+         Touch: press ripple on cards
+      ---------------------------------------------------------------- */
+      if (!fine) {
+        cards.forEach(function (card) {
+          card.addEventListener("pointerdown", function (e) {
+            const r = card.getBoundingClientRect();
+            const ripple = document.createElement("span");
+            ripple.className = "ripple";
+            ripple.style.left = (e.clientX - r.left) + "px";
+            ripple.style.top = (e.clientY - r.top) + "px";
+            card.querySelector(".card-inner").appendChild(ripple);
+            setTimeout(function () { ripple.remove(); }, 600);
+          }, { passive: true });
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
