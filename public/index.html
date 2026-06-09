@@ -156,6 +156,30 @@
       color: transparent;
     }
 
+    /* Event logo replaces the text title; subtle gold/blue glow to blend in */
+    .logo {
+      display: block;
+      width: min(84%, 400px);
+      height: auto;
+      margin: 4px auto 0;
+      filter:
+        drop-shadow(0 0 16px rgba(255, 194, 60, .34))
+        drop-shadow(0 0 40px rgba(58, 123, 255, .26));
+      animation: logoGlow 5.5s ease-in-out infinite;
+    }
+    @keyframes logoGlow {
+      0%, 100% {
+        filter:
+          drop-shadow(0 0 14px rgba(255, 194, 60, .28))
+          drop-shadow(0 0 34px rgba(58, 123, 255, .22));
+      }
+      50% {
+        filter:
+          drop-shadow(0 0 22px rgba(255, 194, 60, .46))
+          drop-shadow(0 0 54px rgba(58, 123, 255, .34));
+      }
+    }
+
     .welcome {
       margin: 16px auto 0;
       max-width: 30ch;
@@ -401,7 +425,9 @@
   <div class="wrap">
     <header>
       <div class="kicker">EXATEC</div>
-      <h1 class="title">Regreso<br />a <span class="accent">Casa</span></h1>
+      <h1 class="title">
+        <img class="logo" src="/logo-rac.png" alt="Regreso a Casa" width="886" height="240" />
+      </h1>
       <p class="welcome">Bienvenido a casa, EXATEC. Reviví la reunión y llevate un recuerdo del Campus Monterrey.</p>
       <div class="rule" aria-hidden="true"></div>
     </header>
