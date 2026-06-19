@@ -213,6 +213,13 @@
       --ry: 0deg;
       position: relative;
       display: block;
+      width: 100%;
+      text-align: left;
+      font: inherit;
+      background: transparent;
+      border: 0;
+      padding: 0;
+      cursor: pointer;
       text-decoration: none;
       color: inherit;
       border-radius: 20px;
@@ -413,6 +420,85 @@
       .beams { display: none; }
       .card-inner { transform: none !important; }
     }
+
+    /* ---------------------------------------------------------------------
+       Discount code modal
+    --------------------------------------------------------------------- */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(0, 9, 31, 0.62);
+      -webkit-backdrop-filter: blur(6px);
+      backdrop-filter: blur(6px);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .3s var(--ease), visibility .3s var(--ease);
+    }
+    .modal-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+    .modal {
+      position: relative;
+      width: min(420px, 100%);
+      padding: 38px 30px 30px;
+      text-align: center;
+      border-radius: 22px;
+      background: linear-gradient(160deg, rgba(0, 42, 115, 0.96), rgba(0, 18, 51, 0.96));
+      border: 1px solid var(--card-bd-hi);
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55);
+      transform: translateY(16px) scale(.96);
+      transition: transform .34s var(--ease);
+    }
+    .modal-overlay.open .modal { transform: translateY(0) scale(1); }
+    .modal-close {
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      font-size: 22px;
+      line-height: 1;
+      color: var(--muted);
+      background: transparent;
+      border: 0;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: color .2s var(--ease), background .2s var(--ease);
+    }
+    .modal-close:hover { color: var(--text); background: rgba(157, 188, 255, 0.12); }
+    .modal-title {
+      margin: 0 0 18px;
+      font-size: clamp(1.1rem, 4.4vw, 1.35rem);
+      font-weight: 700;
+      color: var(--gold-soft);
+      letter-spacing: .01em;
+    }
+    .modal-code {
+      display: block;
+      margin: 0 auto 18px;
+      padding: 16px 14px;
+      font-size: clamp(2.1rem, 9vw, 2.9rem);
+      font-weight: 800;
+      letter-spacing: .12em;
+      color: var(--text);
+      background: rgba(255, 194, 60, 0.08);
+      border: 1px dashed var(--card-bd-hi);
+      border-radius: 14px;
+    }
+    .modal-note {
+      margin: 0;
+      font-size: .82rem;
+      line-height: 1.45;
+      color: var(--muted);
+    }
   </style>
 </head>
 <body>
@@ -476,7 +562,7 @@
         </span>
       </a>
 
-      <a class="card" style="--d:.98s" href="#" target="_blank" rel="noopener">
+      <button type="button" class="card" style="--d:.98s" id="discountTrigger" aria-haspopup="dialog">
         <span class="card-inner">
           <span class="emoji" aria-hidden="true">🏷️</span>
           <span class="card-text">
@@ -485,10 +571,19 @@
           </span>
           <span class="arrow" aria-hidden="true">→</span>
         </span>
-      </a>
+      </button>
     </nav>
 
     <footer>Tec de Monterrey <span class="dot">·</span> Campus Monterrey</footer>
+  </div>
+
+  <div class="modal-overlay" id="discountModal" role="dialog" aria-modal="true" aria-labelledby="discountTitle">
+    <div class="modal">
+      <button type="button" class="modal-close" id="discountClose" aria-label="Cerrar">×</button>
+      <h2 class="modal-title" id="discountTitle">Código de Descuento</h2>
+      <span class="modal-code">EXATEC25</span>
+      <p class="modal-note">Proporciona este código en caja al momento de llevar a cabo tu compra.</p>
+    </div>
   </div>
 
   <script>
@@ -498,6 +593,43 @@
       const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
       const fine = matchMedia("(hover: hover) and (pointer: fine)").matches;
       const cards = Array.prototype.slice.call(document.querySelectorAll(".card"));
+
+      /* ----------------------------------------------------------------
+         Discount code modal
+      ---------------------------------------------------------------- */
+      (function () {
+        const trigger = document.getElementById("discountTrigger");
+        const modal = document.getElementById("discountModal");
+        const closeBtn = document.getElementById("discountClose");
+        if (!trigger || !modal || !closeBtn) return;
+
+        let lastFocus = null;
+
+        function open() {
+          lastFocus = document.activeElement;
+          modal.classList.add("open");
+          document.body.style.overflow = "hidden";
+          closeBtn.focus();
+          document.addEventListener("keydown", onKey);
+        }
+
+        function close() {
+          modal.classList.remove("open");
+          document.body.style.overflow = "";
+          document.removeEventListener("keydown", onKey);
+          if (lastFocus && lastFocus.focus) lastFocus.focus();
+        }
+
+        function onKey(e) {
+          if (e.key === "Escape") close();
+        }
+
+        trigger.addEventListener("click", open);
+        closeBtn.addEventListener("click", close);
+        modal.addEventListener("click", function (e) {
+          if (e.target === modal) close();
+        });
+      })();
 
       /* ----------------------------------------------------------------
          Particle field (confetti-like soft drift)
