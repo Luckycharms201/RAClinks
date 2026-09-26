@@ -2,3 +2,6 @@ node_modules
 .wrangler
 .DS_Store
 npm-debug.log*
+
+# Original de la imagen; se sirve public/clases-del-recuerdo.webp
+/clase del recuerdo.png
