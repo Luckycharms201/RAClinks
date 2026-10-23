@@ -3,5 +3,5 @@ node_modules
 .DS_Store
 npm-debug.log*
 
-# Original de la imagen; se sirve public/clases-del-recuerdo.webp
+# Original de la imagen; se sirve public/clase-del-recuerdo-2026.webp
 /clase del recuerdo.png
