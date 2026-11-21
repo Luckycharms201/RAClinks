@@ -3,6 +3,6 @@ node_modules
 .DS_Store
 npm-debug.log*
 
-# Originales de las imágenes; se sirve public/clases-del-recuerdo-40-60.webp
+# Originales de las imágenes; se sirve public/clases-del-recuerdo-40-60-v2.webp
 /clase del recuerdo.png
-/Clases del Recuerdo EXATEC 2026.png
+/Clases del Recuerdo EXATEC 2026*.png
